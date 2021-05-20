@@ -1,6 +1,6 @@
 {
   "name": "metaframe-bluetooth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "scripts": {
     "prebuild": "npm i && ./node_modules/typescript/bin/tsc --build --verbose",
