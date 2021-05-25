@@ -8,6 +8,9 @@ export APP_FQDN                    := env_var_or_default("APP_FQDN", "metaframe1
 export APP_PORT                    := env_var_or_default("APP_PORT", "443")
 # browser hot-module-replacement (live reloading)
 export PORT_HMR                    := env_var_or_default("PORT_HMR", "3456")
+# Bluetooth is NOT allowed in cross-origin iframes: https://bugs.chromium.org/p/chromium/issues/detail?id=518042
+# We we package this metaframe into the static content of https://app.metapages.org so that it is same-origin
+export METAPAGES_APP_DIR           := env_var_or_default("METAPAGES_APP_DIR", "")
 # see https://github.com/parcel-bundler/parcel/issues/2031
 PARCEL_WORKERS                     := env_var_or_default("PARCEL_WORKERS", `if [ -f /.dockerenv ]; then echo "1" ; fi`)
 parcel                             := "PARCEL_WORKERS=" + PARCEL_WORKERS +  " node_modules/parcel-bundler/bin/cli.js"
@@ -50,6 +53,7 @@ build outdir="dist": _ensure_npm_modules (_tsc "--build --verbose")
     rm -rf {{outdir}}/*
     {{parcel}} build public/index.html --public-url replacethislinewithadot --no-autoinstall --detailed-report 50 --out-dir {{outdir}}
     sed -i 's/replacethislinewithadot/./g' {{outdir}}/index.html
+    if [ "$METAPAGES_APP_DIR" != "" ]; then rm -rf $METAPAGES_APP_DIR/static/metaframe/bluetooth/*; cp -r {{outdir}}/* $METAPAGES_APP_DIR/static/metaframe/bluetooth/; fi
 
 # rebuild the client on changes, but do not serve
 watch:
