@@ -42,13 +42,14 @@ dev: _ensure_npm_modules _mkcert (_tsc "--build --verbose")
     fi
 
 # deploy to gh-pages branch
-publish: build
+publish: (build "dist")
 	npm run deploy
 
 # Build the client static files
-build: _ensure_npm_modules (_tsc "--build --verbose")
-    rm -rf dist/*
-    {{parcel}} build 'public/index.html' --public-url ./ --no-autoinstall --detailed-report 50
+build outdir="dist": _ensure_npm_modules (_tsc "--build --verbose")
+    rm -rf {{outdir}}/*
+    {{parcel}} build public/index.html --public-url replacethislinewithadot --no-autoinstall --detailed-report 50 --out-dir {{outdir}}
+    sed -i 's/replacethislinewithadot/./g' {{outdir}}/index.html
 
 # rebuild the client on changes, but do not serve
 watch:
@@ -57,7 +58,7 @@ watch:
 
 # deletes .cache .parcel-cache .certs dist
 clean:
-    rm -rf .cache .parcel-cache .certs dist
+    rm -rf .cache .parcel-cache .certs
 
 # compile typescript src, may or may not emit artifacts
 _tsc +args="":

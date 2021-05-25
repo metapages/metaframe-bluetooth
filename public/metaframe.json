@@ -1,6 +1,7 @@
 {
 	"version": "0.3",
 	"metadata": {
-		"title": "Bluetooth"
+		"title": "Bluetooth",
+		"description": "Currently limited to Chrome and must be same origin hence embedded@ https://app.metapages.org/metaframe/bluetooth"
 	}
 }

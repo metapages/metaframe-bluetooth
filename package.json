@@ -3,8 +3,7 @@
   "version": "0.1.1",
   "private": false,
   "scripts": {
-    "prebuild": "npm i && ./node_modules/typescript/bin/tsc --build --verbose",
-    "build": "rm -rf dist/* && node_modules/parcel-bundler/bin/cli.js build public/index.html --no-autoinstall",
+    "build": "just build",
     "deploy": "gh-pages -d dist"
   },
   "main": "index.js",
